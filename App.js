@@ -1,20 +1,49 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { StyleSheet, View, FlatList, Button } from "react-native";
+import { StatusBar } from "expo-status-bar";
+
+import GoalItem from "./components/GoalItem";
+import GoalInput from "./components/GoalInput";
 
 export default function App() {
+  const [modalIsVisible, setModalIsVisible] = React.useState(false);
+  const [courseGoals, setCourseGoals] = React.useState([]);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar style="light" />
+      <View style={styles.appContainer}>
+        <Button
+          title="Add New Goal"
+          color="#a065ec"
+          onPress={() => setModalIsVisible(true)}
+        />
+        <GoalInput
+          visible={modalIsVisible}
+          setModalIsVisible={setModalIsVisible}
+          setCourseGoals={setCourseGoals}
+        />
+        <View style={styles.goalsContainer}>
+          <FlatList
+            keyExtractor={(item, index) => item.id}
+            data={courseGoals}
+            renderItem={(itemData) => (
+              <GoalItem setCourseGoals={setCourseGoals} item={itemData.item} />
+            )}
+          />
+        </View>
+      </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  appContainer: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingTop: 50,
+    paddingHorizontal: 16,
+  },
+  goalsContainer: {
+    flex: 5,
   },
 });
